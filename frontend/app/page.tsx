@@ -141,6 +141,14 @@ export default function HomePage() {
             <textarea
               value={brief}
               onChange={(e) => setBrief(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                  e.preventDefault();
+                  if (!isRunning && brief.trim()) {
+                    run();
+                  }
+                }
+              }}
               placeholder="e.g., 'Research the latest developments in quantum computing and provide a comprehensive summary with citations'"
               rows={4}
               style={{

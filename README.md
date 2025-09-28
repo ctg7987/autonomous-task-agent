@@ -56,6 +56,26 @@ npm install
 npm run dev
 ```
 
+### Environment Setup
+
+1. **Copy the example environment file:**
+   ```bash
+   cp env.example .env
+   ```
+
+2. **Configure your API keys in `.env`:**
+   ```bash
+   # OpenAI API Key (required for AI features)
+   OPENAI_API_KEY=your_openai_api_key_here
+   
+   # Tavily API Key (optional - for enhanced search)
+   TAVILY_API_KEY=your_tavily_api_key_here
+   ```
+
+3. **Get API Keys:**
+   - **OpenAI**: https://platform.openai.com/api-keys
+   - **Tavily**: https://tavily.com/ (optional)
+
 ### Access the Application
 
 - **Frontend**: http://localhost:3000

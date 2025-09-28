@@ -6,8 +6,15 @@ from typing import AsyncIterator
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from dotenv import load_dotenv
 
 from .graph import run_graph
+
+# Load environment variables
+load_dotenv()
+
+# Note: Set OPENAI_API_KEY environment variable for AI features
+# You can create a .env file with: OPENAI_API_KEY=your_key_here
 
 app = FastAPI(title="Autonomous Multi-Tool AI Task Agent")
 
