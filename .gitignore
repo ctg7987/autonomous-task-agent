@@ -25,3 +25,7 @@ playwright/.cache/
 # Build artifacts
 build/
 dist/
+
+# Test files (keep test_application.py but ignore temporary test files)
+test_*.py
+!test_application.py
