@@ -2,6 +2,18 @@ from typing import List
 import re
 
 
+_NOISE_TOKENS = [
+    "cookie", "consent", "subscribe", "sign in", "privacy", "newsletter",
+    "javascript", "enable", "play video", "watch on youtube", "enable cookies",
+    "advertising", "tracking", "accept", "policy", "copyright",
+    "access denied", "forbidden", "error page", "page not found",
+]
+
+def _decomma(s: str) -> str:
+    s = re.sub(r",(\s*,)+", ", ", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
+
 def extract_facts(text: str) -> List[str]:
     text = (text or "").strip()
     if not text:
@@ -72,10 +84,15 @@ def extract_facts(text: str) -> List[str]:
             continue
             
         # Only keep sentences that look like real content
+        if any(tok in sentence.lower() for tok in _NOISE_TOKENS):
+            continue
+        if sentence.count(',') > 4:
+            continue
         if len(sentence) > 50 and not re.match(r'^[^a-zA-Z]*$', sentence):
             # Clean up the sentence
             clean_sentence = re.sub(r'[^\w\s.,!?-]', ' ', sentence)
             clean_sentence = re.sub(r'\s+', ' ', clean_sentence).strip()
+            clean_sentence = _decomma(clean_sentence)
             if clean_sentence and len(clean_sentence) > 30:
                 filtered_sentences.append(clean_sentence)
     

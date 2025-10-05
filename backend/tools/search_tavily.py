@@ -22,16 +22,33 @@ def validate_url(url: str) -> bool:
         return False
 
 
+def _is_serp(url: str) -> bool:
+    """Return True if the URL looks like a search results page (SERP)."""
+    if not url:
+        return False
+    lowered = url.lower()
+    return (
+        "google.com/search" in lowered
+        or "duckduckgo.com/?q=" in lowered
+        or "bing.com/search" in lowered
+    )
+
+
 def filter_valid_urls(results: List[Dict[str, str]]) -> List[Dict[str, str]]:
     """
     Filter out URLs that return 404 or other errors.
     """
     valid_results = []
     for result in results:
-        if validate_url(result.get("url", "")):
+        url = result.get("url", "")
+        # Skip search result pages; we only want real destination sites
+        if _is_serp(url):
+            print(f"⚠️ Skipping SERP URL: {url}")
+            continue
+        if validate_url(url):
             valid_results.append(result)
         else:
-            print(f"⚠️ Skipping broken URL: {result.get('url', '')}")
+            print(f"⚠️ Skipping broken URL: {url}")
     
     return valid_results
 

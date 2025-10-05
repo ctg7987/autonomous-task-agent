@@ -2,7 +2,7 @@
 
 A modern full-stack AI research assistant that automatically searches, analyzes, and summarizes information from multiple sources. Built with FastAPI backend and Next.js frontend, featuring real-time WebSocket communication and intelligent topic-aware content generation.
 
-## 🚀 Features
+## Features
 
 - **Real-time Research**: Live progress tracking with WebSocket streaming
 - **Topic-Aware AI**: Intelligent summaries tailored to your research topic
@@ -11,13 +11,13 @@ A modern full-stack AI research assistant that automatically searches, analyzes,
 - **Citation Management**: Proper source attribution with clickable links
 - **Offline Capable**: Works without API keys using intelligent mock data
 
-## 📸 Interface Preview
+## Interface Preview
 
 ![Autonomous AI Task Agent Interface](docs/interface-screenshot.png)
 
 *The interface shows real-time research progress, topic-specific summaries, and properly formatted citations.*
 
-## 🛠️ Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.9+
@@ -82,7 +82,7 @@ npm run dev
 - **Backend API**: http://localhost:8000
 - **WebSocket**: ws://localhost:8000/ws
 
-## 🧪 Testing
+## Testing
 
 ### Manual Testing
 
@@ -106,7 +106,7 @@ Run the included test script to verify all components:
 # Run comprehensive tests
 python test_application.py
 
-# Expected output: All tests pass with ✅ indicators
+# Expected output: All tests pass
 ```
 
 #### WebSocket Functionality Test
@@ -129,7 +129,7 @@ async def test_websocket():
         async for message in websocket:
             data = json.loads(message)
             if data.get('event') == 'report':
-                print('✅ Test passed - Report generated successfully')
+                print('Test passed - Report generated successfully')
                 print(f'Summary: {data[\"data\"][\"summary\"][:100]}...')
                 break
 
@@ -202,7 +202,7 @@ done
 wait
 ```
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 .
@@ -236,7 +236,7 @@ wait
 └─ README.md                # This file
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 
@@ -265,7 +265,7 @@ docker compose -f infra/docker-compose.yml up --build
 # Access at http://localhost:3000
 ```
 
-## 🎯 Usage Examples
+## Usage Examples
 
 ### Basic Research Query
 1. Enter: "Research the latest developments in artificial intelligence"
@@ -286,7 +286,7 @@ The system automatically detects research topics and generates relevant content:
 - **Citation Management**: Clickable source links with proper attribution
 - **Content Cleaning**: Automatic removal of HTML artifacts and technical noise
 
-## 🚨 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -314,7 +314,7 @@ uvicorn backend.app:app --reload --log-level debug
 cd frontend && npm run dev -- --verbose
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -322,11 +322,11 @@ cd frontend && npm run dev -- --verbose
 4. Add tests for new functionality
 5. Submit a pull request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Built with [FastAPI](https://fastapi.tiangolo.com/) and [Next.js](https://nextjs.org/)
 - Web scraping powered by [Playwright](https://playwright.dev/)

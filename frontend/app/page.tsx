@@ -42,20 +42,23 @@ export default function HomePage() {
     
     ws.onopen = () => {
       setIsConnected(true);
-      appendLog("🔗 Connected to server");
-      const payload = brief.trim() ? { brief } : "";
-      ws.send(JSON.stringify(payload || brief || ""));
+      appendLog("Connected to server");
+      if (brief.trim()) {
+        ws.send(JSON.stringify({ brief }));
+      } else {
+        ws.send("");
+      }
     };
     
     ws.onmessage = (ev) => {
       try {
         const data = JSON.parse(ev.data);
         if (data.event === "log") {
-          appendLog(`📝 ${data.data}`);
+          appendLog(`${data.data}`);
         }
         if (data.event === "report") {
           setReport(data.data);
-          appendLog("✅ Report generated successfully!");
+          appendLog("Report generated successfully!");
           setIsRunning(false);
         }
       } catch (e) {
@@ -64,13 +67,13 @@ export default function HomePage() {
     };
     
     ws.onerror = () => {
-      appendLog("❌ WebSocket connection error");
+      appendLog("WebSocket connection error");
       setIsConnected(false);
       setIsRunning(false);
     };
     
     ws.onclose = () => {
-      appendLog("🏁 Task completed");
+      appendLog("Task completed");
       setIsConnected(false);
       setIsRunning(false);
       // Close the WebSocket connection
@@ -91,10 +94,13 @@ export default function HomePage() {
       minHeight: "100vh", 
       background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
       padding: "20px",
-      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+      fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
     }}>
       <div style={{
-        maxWidth: "1200px",
+        width: "min(96vw, 1280px)",
         margin: "0 auto",
         background: "white",
         borderRadius: "20px",
@@ -105,19 +111,19 @@ export default function HomePage() {
         <div style={{
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
           color: "white",
-          padding: "40px",
+          padding: "clamp(24px, 5vw, 48px)",
           textAlign: "center"
         }}>
           <h1 style={{
-            fontSize: "2.5rem",
+            fontSize: "clamp(1.6rem, 4.2vw, 2.6rem)",
             fontWeight: "700",
             margin: "0 0 10px 0",
             textShadow: "0 2px 4px rgba(0,0,0,0.3)"
           }}>
-            🤖 Autonomous AI Task Agent
+            Autonomous AI Task Agent
           </h1>
           <p style={{
-            fontSize: "1.1rem",
+            fontSize: "clamp(0.9rem, 2.2vw, 1.1rem)",
             margin: "0",
             opacity: "0.9"
           }}>
@@ -126,7 +132,7 @@ export default function HomePage() {
         </div>
 
         {/* Main Content */}
-        <div style={{ padding: "40px" }}>
+        <div style={{ padding: "clamp(24px, 4.5vw, 48px)" }}>
           {/* Input Section */}
           <div style={{ marginBottom: "30px" }}>
             <label style={{
@@ -136,7 +142,7 @@ export default function HomePage() {
               marginBottom: "15px",
               color: "#374151"
             }}>
-              📋 Research Brief
+              Research Brief
             </label>
             <textarea
               value={brief}
@@ -153,10 +159,10 @@ export default function HomePage() {
               rows={4}
               style={{
                 width: "100%",
-                padding: "20px",
+                padding: "clamp(14px, 2.5vw, 20px)",
                 border: "2px solid #e5e7eb",
                 borderRadius: "12px",
-                fontSize: "1rem",
+                fontSize: "clamp(0.95rem, 2.4vw, 1rem)",
                 fontFamily: "inherit",
                 resize: "vertical",
                 transition: "border-color 0.3s ease",
@@ -175,7 +181,7 @@ export default function HomePage() {
             }}>
               <button 
                 onClick={run} 
-                disabled={isRunning || !brief.trim()}
+                disabled={isRunning}
                 style={{
                   background: isRunning ? "#9ca3af" : "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                   color: "white",
@@ -201,7 +207,7 @@ export default function HomePage() {
                   }
                 }}
               >
-                {isRunning ? "⏳ Processing..." : "🚀 Run Research"}
+                {isRunning ? "Processing..." : "Run Research"}
               </button>
               
               <button 
@@ -218,7 +224,7 @@ export default function HomePage() {
                   transition: "all 0.3s ease"
                 }}
               >
-                🗑️ Clear
+                Clear
               </button>
               
               <div style={{
@@ -252,14 +258,14 @@ export default function HomePage() {
                 alignItems: "center",
                 gap: "10px"
               }}>
-                📊 Live Progress
+                Live Progress
               </h2>
               <div style={{
                 background: "#f8fafc",
                 border: "1px solid #e2e8f0",
                 borderRadius: "12px",
-                padding: "20px",
-                maxHeight: "300px",
+                padding: "clamp(14px, 3vw, 20px)",
+                maxHeight: "32vh",
                 overflowY: "auto",
                 fontFamily: "Monaco, 'Courier New', monospace"
               }}>
@@ -295,7 +301,7 @@ export default function HomePage() {
                 alignItems: "center",
                 gap: "10px"
               }}>
-                📄 Research Report
+                Research Report
               </h2>
               
               <div style={{
@@ -311,15 +317,18 @@ export default function HomePage() {
                   marginBottom: "15px",
                   color: "#1f2937"
                 }}>
-                  📝 Summary
+                  Summary
                 </h3>
-                <p style={{
-                  lineHeight: "1.6",
+                <pre style={{
+                  whiteSpace: "pre-wrap",
+                  lineHeight: "1.75",
                   color: "#374151",
-                  fontSize: "1rem"
+                  fontSize: "1rem",
+                  fontFamily: "inherit",
+                  margin: 0
                 }}>
                   {report.summary || "No summary available"}
-                </p>
+                </pre>
               </div>
 
               {report.citations && report.citations.length > 0 && (
@@ -333,7 +342,7 @@ export default function HomePage() {
                     alignItems: "center",
                     gap: "8px"
                   }}>
-                    🔗 Sources & Citations
+                    Sources & Citations
                   </h3>
                   <div style={{
                     display: "grid",

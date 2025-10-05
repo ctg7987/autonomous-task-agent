@@ -3,6 +3,7 @@ import os
 from typing import Any, AsyncIterator, Dict, List
 
 from .tools.search_tavily import tavily_search
+from .tools.google_search import google_search
 from .tools.browse_playwright import fetch_page
 from .tools.extractors import extract_facts
 from .tools.ai_summarizer import get_ai_summary
@@ -19,7 +20,12 @@ async def plan_node(brief: str) -> Dict[str, Any]:
 
 async def search_node(plan: Dict[str, Any]) -> List[Dict[str, str]]:
     query = plan["query"]
-    results = tavily_search(query, k=3)
+    # Allow switching search provider via env var
+    provider = os.getenv("SEARCH_PROVIDER", "auto").lower()
+    if provider in ("google", "duckduckgo"):
+        results = google_search(query, num_results=5)
+    else:
+        results = tavily_search(query, k=5)
     return results
 
 

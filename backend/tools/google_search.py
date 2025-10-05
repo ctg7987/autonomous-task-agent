@@ -4,11 +4,53 @@ from typing import List, Dict
 import time
 import re
 
+def _serper_google_search(query: str, num_results: int) -> List[Dict[str, str]]:
+    """
+    Use Serper.dev (Google SERP API) when SERPER_API_KEY is available.
+    Returns organic result links (real sites), not the SERP page.
+    """
+    api_key = os.getenv("SERPER_API_KEY")
+    if not api_key:
+        return []
+    try:
+        resp = requests.post(
+            "https://google.serper.dev/search",
+            headers={"X-API-KEY": api_key, "Content-Type": "application/json"},
+            json={"q": query, "num": max(3, min(10, num_results))},
+            timeout=12,
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            organic = data.get("organic", [])
+            results: List[Dict[str, str]] = []
+            for item in organic[:num_results]:
+                url = item.get("link") or item.get("url") or ""
+                if not url:
+                    continue
+                results.append({
+                    "url": url,
+                    "title": item.get("title") or url,
+                    "content": item.get("snippet") or "",
+                })
+            if results:
+                print(f"🔍 Found {len(results)} Google results via Serper")
+                return results
+    except Exception as e:
+        print(f"❌ Serper search failed: {e}")
+    return []
+
+
 def google_search(query: str, num_results: int = 5) -> List[Dict[str, str]]:
     """
     Perform a real Google search and return results.
     This uses a simple approach to get real search results.
     """
+    # 1) Prefer Serper (Google SERP API) if key provided
+    serper = _serper_google_search(query, num_results)
+    if serper:
+        return serper
+
+    # 2) Fallback: DuckDuckGo Instant Answer for real links without keys
     try:
         # Use DuckDuckGo Instant Answer API as a fallback (no API key needed)
         # This gives us real search results without requiring API keys
