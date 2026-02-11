@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  output: "export",
+  basePath: "/autonomous-task-agent",
   images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "www.google.com" },
-    ],
+    unoptimized: true,
   },
 };
 
