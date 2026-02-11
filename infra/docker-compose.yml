@@ -7,15 +7,20 @@ services:
       - "8000:8000"
     env_file:
       - ../.env
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   frontend:
-    image: node:20
-    working_dir: /app
-    volumes:
-      - ../frontend:/app
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.frontend
     environment:
-      - NEXT_PUBLIC_BACKEND_WS=ws://backend:8000/ws
+      - NEXT_PUBLIC_BACKEND_URL=http://backend:8000
     ports:
       - "3000:3000"
-    command: bash -lc "npm install && npm run dev"
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy

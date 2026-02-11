@@ -1,14 +1,10 @@
 [project]
 name = "autonomous-task-agent-backend"
-version = "0.1.0"
-description = "Autonomous Multi-Tool AI Task Agent backend"
+version = "2.0.0"
+description = "Autonomous multi-agent AI research assistant"
 requires-python = ">=3.11"
-
-[project.optional-dependencies]
-playwright = ["playwright"]
 
 [tool.uvicorn]
 app = "backend.app:app"
 host = "0.0.0.0"
 port = 8000
-reload = true
